@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lógica Computacional</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --highlight: #e74c3c;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .container {
+            width: 85%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            margin: 0;
+            font-size: 2.5rem;
+        }
+        
+        h2 {
+            color: var(--primary);
+            border-bottom: 2px solid var(--secondary);
+            padding-bottom: 0.5rem;
+            margin-top: 2rem;
+        }
+        
+        h3 {
+            color: var(--secondary);
+        }
+        
+        nav {
+            background-color: var(--dark);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        nav ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        nav li {
+            margin: 0 1rem;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        
+        nav a:hover {
+            background-color: var(--secondary);
+        }
+        
+        section {
+            background-color: white;
+            padding: 2rem;
+            margin: 1.5rem 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card {
+            background-color: var(--light);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            border-left: 4px solid var(--secondary);
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .paradigm-card {
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .paradigm-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .code-block {
+            background-color: #282c34;
+            color: #abb2bf;
+            padding: 1rem;
+            border-radius: 6px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+        
+        .truth-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+        
+        .truth-table th, .truth-table td {
+            border: 1px solid #ddd;
+            padding: 0.75rem;
+            text-align: center;
+        }
+        
+        .truth-table th {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .truth-table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        
+        .timeline {
+            position: relative;
+            max-width: 1200px;
+            margin: 2rem auto;
+        }
+        
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            background-color: var(--secondary);
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -3px;
+        }
+        
+        .timeline-item {
+            padding: 10px 40px;
+            position: relative;
+            width: 50%;
+            box-sizing: border-box;
+        }
+        
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            right: -12px;
+            background-color: white;
+            border: 4px solid var(--highlight);
+            top: 15px;
+            border-radius: 50%;
+            z-index: 1;
+        }
+        
+        .left {
+            left: 0;
+        }
+        
+        .right {
+            left: 50%;
+        }
+        
+        .left::before {
+            content: " ";
+            height: 0;
+            position: absolute;
+            top: 22px;
+            width: 0;
+            z-index: 1;
+            right: 30px;
+            border: medium solid var(--secondary);
+            border-width: 10px 0 10px 10px;
+            border-color: transparent transparent transparent var(--secondary);
+        }
+        
+        .right::before {
+            content: " ";
+            height: 0;
+            position: absolute;
+            top: 22px;
+            width: 0;
+            z-index: 1;
+            left: 30px;
+            border: medium solid var(--secondary);
+            border-width: 10px 10px 10px 0;
+            border-color: transparent var(--secondary) transparent transparent;
+        }
+        
+        .right::after {
+            left: -12px;
+        }
+        
+        .timeline-content {
+            padding: 20px 30px;
+            background-color: white;
+            position: relative;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+        }
+        
+        .comparison-table th, .comparison-table td {
+            border: 1px solid #ddd;
+            padding: 1rem;
+            text-align: left;
+        }
+        
+        .comparison-table th {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .comparison-table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        
+        footer {
+            background-color: var(--dark);
+            color: white;
+            text-align: center;
+            padding: 1.5rem 0;
+            margin-top: 2rem;
+        }
+        
+        .icon {
+            font-size: 1.5rem;
+            margin-right: 0.5rem;
+            vertical-align: middle;
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: var(--secondary);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background-color 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn:hover {
+            background-color: #2980b9;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        @media screen and (max-width: 768px) {
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            nav li {
+                margin: 0.5rem 0;
+            }
+            
+            .timeline::after {
+                left: 31px;
+            }
+            
+            .timeline-item {
+                width: 100%;
+                padding-left: 70px;
+                padding-right: 25px;
+            }
+            
+            .timeline-item::before {
+                left: 60px;
+                border: medium solid var(--secondary);
+                border-width: 10px 10px 10px 0;
+                border-color: transparent var(--secondary) transparent transparent;
+            }
+            
+            .left::after, .right::after {
+                left: 18px;
+            }
+            
+            .right {
+                left: 0%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Lógica Computacional</h1>
+            <p>Entenda o que é a lógica computacional, sua importância na programação e como é aplicada na prática!</p>
+        </div>
+    </header>
+    
+    <nav>
+        <div class="container">
+            <ul>
+                <li><a href="#introducao">Introdução</a></li>
+                <li><a href="#historia">História</a></li>
+                <li><a href="#fundamentos">Fundamentos</a></li>
+                <li><a href="#paradigmas">Paradigmas</a></li>
+                <li><a href="#aplicacoes">Aplicações</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+    <main class="container">
+        <section id="introducao">
+            <h2><span class="icon">💻</span> Introdução à Lógica Computacional</h2>
+            
+            <div class="card">
+                <h3>O que é Lógica Computacional?</h3>
+                <p>A lógica computacional é uma área da lógica matemática aplicada à ciência da computação. A sua relação com a ciência da computação e a engenharia é comparável à ligação da lógica matemática com a matemática ou da lógica filosófica com a filosofia.</p>
+                <p>O foco deste domínio é explorar princípios, métodos e sistemas que permitem representar e manipular raciocínios lógicos num contexto computacional, aplicando-os a problemas computacionais. Ela serve como uma ponte entre a matemática e a ciência da computação, com aplicações em algoritmos, linguagens de programação e inteligência artificial, sendo fundamental para o desenvolvimento e a evolução da computação moderna.</p>
+            </div>
+            
+            <div class="card">
+                <h3><span class="icon">🔗</span> Relação com a Ciência da Computação</h3>
+                <p>A lógica computacional influencia diversas áreas:</p>
+                <ul>
+                    <li><strong>Algoritmos</strong>: Baseados em raciocínios lógicos e operações booleanas.</li>
+                    <li><strong>Linguagens de Programação</strong>: Fundamentais para construir e interpretar código.</li>
+                    <li><strong>Sistemas Inteligentes</strong>: Criar sistemas que raciocinam autonomamente.</li>
+                    <li><strong>Verificação de Software</strong>: Garantir que os programas funcionem corretamente.</li>
+                </ul>
+            </div>
+            
+            <div class="card">
+                <h3><span class="icon">🌟</span> Importância na Programação</h3>
+                <p>Ajuda a:</p>
+                <ul>
+                    <li><strong>Modelar problemas</strong> de forma estruturada.</li>
+                    <li><strong>Provar a precisão e correção</strong> através de métodos formais.</li>
+                    <li><strong>Apoiar áreas como a inteligência artificial</strong>, com conceitos de inferência e dedução.</li>
+                </ul>
+            </div>
+        </section>
+        
+        <section id="historia">
+            <h2><span class="icon">🕰️</span> História e Evolução</h2>
+            
+            <div class="timeline">
+                <div class="timeline-item left">
+                    <div class="timeline-content">
+                        <h3>Aristóteles</h3>
+                        <p>Desenvolveu os fundamentos do raciocínio dedutivo, estabelecendo as bases da lógica formal.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item right">
+                    <div class="timeline-content">
+                        <h3>Leibniz (século XVII)</h3>
+                        <p>Propôs a ideia de uma linguagem lógica universal que pudesse representar todo o conhecimento humano.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item left">
+                    <div class="timeline-content">
+                        <h3>George Boole (1847)</h3>
+                        <p>Criou a álgebra booleana, fundamentando a lógica matemática que seria essencial para a computação.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item right">
+                    <div class="timeline-content">
+                        <h3>Turing, Church e Gödel (século XX)</h3>
+                        <p>Desenvolveram os fundamentos teóricos da computação moderna, incluindo a máquina de Turing e o teorema da incompletude de Gödel.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item left">
+                    <div class="timeline-content">
+                        <h3>Hoje</h3>
+                        <p>Aplicações em inteligência artificial, linguagens de programação e verificação de software.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="fundamentos">
+            <h2><span class="icon">🧩</span> Fundamentos de Lógica</h2>
+            
+            <div class="card">
+                <h3>Lógica Proposicional</h3>
+                <p>A <strong>lógica proposicional</strong> é um ramo da lógica matemática que lida com proposições ou afirmações que podem ser classificadas como verdadeiras ou falsas. Cada proposição é representada por uma variável (geralmente, letras como <em>p, q, r</em>), que assume valores de <strong>verdadeiro (V)</strong> ou <strong>falso (F)</strong>.</p>
+            </div>
+            
+            <div class="card">
+                <h3>Conectores Lógicos</h3>
+                <p>Os conectores lógicos são usados para combinar proposições e formar novas proposições:</p>
+                
+                <table class="truth-table">
+                    <tr>
+                        <th>Conector</th>
+                        <th>Símbolo</th>
+                        <th>Descrição</th>
+                        <th>Exemplo</th>
+                    </tr>
+                    <tr>
+                        <td>E (AND)</td>
+                        <td>∧</td>
+                        <td>Verdadeiro apenas se ambas as proposições forem verdadeiras</td>
+                        <td><em>p</em> ∧ <em>q</em></td>
+                    </tr>
+                    <tr>
+                        <td>OU (OR)</td>
+                        <td>∨</td>
+                        <td>Verdadeiro se pelo menos uma das proposições for verdadeira</td>
+                        <td><em>p</em> ∨ <em>q</em></td>
+                    </tr>
+                    <tr>
+                        <td>NÃO (NOT)</td>
+                        <td>¬</td>
+                        <td>Inverte o valor lógico da proposição</td>
+                        <td>¬<em>p</em></td>
+                    </tr>
+                    <tr>
+                        <td>SE...ENTÃO (CONDICIONAL)</td>
+                        <td>→</td>
+                        <td>Falso apenas quando a primeira é verdadeira e a segunda é falsa</td>
+                        <td><em>p</em> → <em>q</em></td>
+                    </tr>
+                    <tr>
+                        <td>SE E SOMENTE SE (BICONDICIONAL)</td>
+                        <td>↔</td>
+                        <td>Verdadeiro quando ambas têm o mesmo valor lógico</td>
+                        <td><em>p</em> ↔ <em>q</em></td>
+                    </tr>
+                </table>
+            </div>
+            
+            <div class="card">
+                <h3>Tabelas de Verdade</h3>
+                <p>Tabelas de verdade mostram todos os valores possíveis das proposições compostas:</p>
+                
+                <div class="grid">
+                    <div>
+                        <h4>AND (p ∧ q)</h4>
+                        <table class="truth-table">
+                            <tr>
+                                <th>p</th>
+                                <th>q</th>
+                                <th>p ∧ q</th>
+                            </tr>
+                            <tr>
+                                <td>V</td>
+                                <td>V</td>
+                                <td>V</td>
+                            </tr>
+                            <tr>
+                                <td>V</td>
+                                <td>F</td>
+                                <td>F</td>
+                            </tr>
+                            <tr>
+                                <td>F</td>
+                                <td>V</td>
+                                <td>F</td>
+                            </tr>
+                            <tr>
+                                <td>F</td>
+                                <td>F</td>
+                                <td>F</td>
+                            </tr>
+                        </table>
+                    </div>
+                    
+                    <div>
+                        <h4>OR (p ∨ q)</h4>
+                        <table class="truth-table">
+                            <tr>
+                                <th>p</th>
+                                <th>q</th>
+                                <th>p ∨ q</th>
+                            </tr>
+                            <tr>
+                                <td>V</td>
+                                <td>V</td>
+                                <td>V</td>
+                            </tr>
+                            <tr>
+                                <td>V</td>
+                                <td>F</td>
+                                <td>V</td>
+                            </tr>
+                            <tr>
+                                <td>F</td>
+                                <td>V</td>
+                                <td>V</td>
+                            </tr>
+                            <tr>
+                                <td>F</td>
+                                <td>F</td>
+                                <td>F</td>
+                            </tr>
+                        </table>
+                    </div>
+                    
+                    <div>
+                        <h4>NOT (¬p)</h4>
+                        <table class="truth-table">
+                            <tr>
+                                <th>p</th>
+                                <th>¬p</th>
+                            </tr>
+                            <tr>
+                                <td>V</td>
+                                <td>F</td>
+                            </tr>
+                            <tr>
+                                <td>F</td>
+                                <td>V</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="paradigmas">
+            <h2><span class="icon">🔄</span> Paradigmas de Programação</h2>
+            
+            <div class="grid">
+                <div class="paradigm-card">
+                    <h3>Programação Imperativa</h3>
+                    <p>Foco em <strong>como</strong> algo deve ser feito (sequência de comandos). O programador controla o estado do programa com variáveis, loops e estruturas condicionais.</p>
+                    
+                    <h4>Exemplos de Linguagens:</h4>
+                    <ul>
+                        <li>C</li>
+                        <li>Python</li>
+                        <li>Java</li>
+                    </ul>
+                    
+                    <h4>Conceitos Centrais:</h4>
+                    <ul>
+                        <li>Variáveis mutáveis</li>
+                        <li>Loops (for, while)</li>
+                        <li>Estruturas condicionais (if-else)</li>
+                    </ul>
+                    
+                    <button class="btn" onclick="toggleCode('imperative-code')">Mostrar Exemplo</button>
+                    <div id="imperative-code" class="code-block hidden">
+                        <pre><code># Exemplo em Python (Imperativo)
+# Soma de números em uma lista
+def soma_lista(lista):
+    total = 0  # Variável mutável
+    for numero in lista:  # Loop
+        total += numero  # Modificação de estado
+    return total
+
+numeros = [1, 2, 3, 4, 5]
+print(soma_lista(numeros))  # Saída: 15</code></pre>
+                    </div>
+                </div>
+                
+                <div class="paradigm-card">
+                    <h3>Programação Funcional</h3>
+                    <p>Foco em <strong>o que</strong> deve ser feito (funções e transformações de dados). Uso de funções puras, imutabilidade e recursão.</p>
+                    
+                    <h4>Exemplos de Linguagens:</h4>
+                    <ul>
+                        <li>Haskell</li>
+                        <li>Lisp</li>
+                        <li>Scala</li>
+                    </ul>
+                    
+                    <h4>Conceitos Centrais:</h4>
+                    <ul>
+                        <li>Funções puras</li>
+                        <li>Imutabilidade</li>
+                        <li>Recursão</li>
+                        <li>Funções de alta ordem</li>
+                    </ul>
+                    
+                    <button class="btn" onclick="toggleCode('functional-code')">Mostrar Exemplo</button>
+                    <div id="functional-code" class="code-block hidden">
+                        <pre><code>-- Exemplo em Haskell (Funcional)
+-- Soma de números em uma lista
+somaLista :: [Int] -> Int
+somaLista [] = 0  -- Caso base
+somaLista (x:xs) = x + somaLista xs  -- Recursão
+
+-- Uso:
+-- somaLista [1, 2, 3, 4, 5]  -- Retorna 15</code></pre>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>Comparação entre Paradigmas</h3>
+                
+                <table class="comparison-table">
+                    <tr>
+                        <th>Característica</th>
+                        <th>Imperativo</th>
+                        <th>Funcional</th>
+                    </tr>
+                    <tr>
+                        <td>Estado</td>
+                        <td>Mutável</td>
+                        <td>Imutável</td>
+                    </tr>
+                    <tr>
+                        <td>Foco</td>
+                        <td>Como fazer (passos)</td>
+                        <td>O que fazer (transformações)</td>
+                    </tr>
+                    <tr>
+                        <td>Controle de fluxo</td>
+                        <td>Loops, condicionais</td>
+                        <td>Recursão, composição de funções</td>
+                    </tr>
+                    <tr>
+                        <td>Funções</td>
+                        <td>Podem ter efeitos colaterais</td>
+                        <td>Funções puras (sem efeitos colaterais)</td>
+                    </tr>
+                    <tr>
+                        <td>Exemplo típico</td>
+                        <td>Modificar uma estrutura de dados</td>
+                        <td>Criar uma nova estrutura de dados transformada</td>
+                    </tr>
+                </table>
+            </div>
+        </section>
+        
+       
+            
+            <div class="card">
+                <h3>Exemplos de Programação</h3>
+                
+                <div class="grid">
+                    <div>
+                        <h4>Soma de Números</h4>
+                        <button class="btn" onclick="toggleCode('sum-imperative')">Imperativo (Python)</button>
+                        <div id="sum-imperative" class="code-block hidden">
+                            <pre><code>def soma_lista(lista):
+    total = 0
+    for numero in lista:
+        total += numero
+    return total</code></pre>
+                        </div>
+                        
+                        <button class="btn" onclick="toggleCode('sum-functional')">Funcional (Haskell)</button>
+                        <div id="sum-functional" class="code-block hidden">
+                            <pre><code>somaLista :: [Int] -> Int
+somaLista [] = 0
+somaLista (x:xs) = x + somaLista xs</code></pre>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h4>Filtro de Números Pares</h4>
+                        <button class="btn" onclick="toggleCode('filter-imperative')">Imperativo (Python)</button>
+                        <div id="filter-imperative" class="code-block hidden">
+                            <pre><code>def filtra_pares(lista):
+    pares = []
+    for numero in lista:
+        if numero % 2 == 0:
+            pares.append(numero)
+    return pares</code></pre>
+                        </div>
+                        
+                        <button class="btn" onclick="toggleCode('filter-functional')">Funcional (Haskell)</button>
+                        <div id="filter-functional" class="code-block hidden">
+                            <pre><code>filtraPares :: [Int] -> [Int]
+filtraPares = filter even</code></pre>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h4>Fatorial de um Número</h4>
+                        <button class="btn" onclick="toggleCode('factorial-imperative')">Imperativo (Python)</button>
+                        <div id="factorial-imperative" class="code-block hidden">
+                            <pre><code>def fatorial(n):
+    resultado = 1
+    for i in range(1, n+1):
+        resultado *= i
+    return resultado</code></pre>
+                        </div>
+                        
+                        <button class="btn" onclick="toggleCode('factorial-functional')">Funcional (Haskell)</button>
+                        <div id="factorial-functional" class="code-block hidden">
+                            <pre><code>fatorial :: Int -> Int
+fatorial 0 = 1
+fatorial n = n * fatorial (n-1)</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <section id="aplicacoes">
+            <h2><span class="icon">🔌</span> Aplicações Práticas</h2>
+            
+            <div class="card">
+                <h3>Exemplo com Arduino: Piscar LED</h3>
+                <p><strong>Componente necessário:</strong> Arduino Uno R3</p>
+                
+                <div class="grid">
+                    <div>
+                        <h4>Código</h4>
+                        <div class="code-block">
+                            <pre><code>void setup() {
+  pinMode(LED_BUILTIN, OUTPUT); // Define o pino do LED como saída
+}
+
+void loop() {
+  digitalWrite(LED_BUILTIN, HIGH); // Liga o LED
+  delay(1000);                     // Espera 1 segundo
+  digitalWrite(LED_BUILTIN, LOW);  // Desliga o LED
+  delay(1000);                     // Espera 1 segundo
+}</code></pre>
+                        </div>
+                    </div>
+                    <div>
+                        <h4>Explicação</h4>
+                        <p>A placa UNO R3 tem um LED integrado ('L') que pode ser controlado pelo programa. O código acima faz o LED piscar a cada 1 segundo (1000ms).</p>
+                        <p>Se alterarmos o delay para 500ms, o LED piscará duas vezes mais rápido.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <h3>Conclusão</h3>
+                <p>A <strong>lógica computacional</strong> pode ser aplicada de maneira distinta em paradigmas imperativo e funcional. Enquanto na programação imperativa controla-se diretamente o estado do programa e o fluxo de execução, na programação funcional foca-se em funções puras e imutabilidade, utilizando recursão e funções de ordem superior para resolver problemas de forma declarativa.</p>
+                <p>Ambos os paradigmas têm suas vantagens e são amplamente utilizados na indústria de software, sendo a compreensão da lógica subjacente essencial para se tornar um programador eficaz em qualquer paradigma.</p>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <p>© 2025 Lógica Computacional - Todos os direitos reservados</p>
+        </div>
+    </footer>
+    
+    <script>
+        function toggleCode(id) {
+            const element = document.getElementById(id);
+            if (element.classList.contains('hidden')) {
+                element.classList.remove('hidden');
+            } else {
+                element.classList.add('hidden');
+            }
+        }
+    </script>
+</body>
+</html>
